@@ -32,7 +32,7 @@ python3 jobschedule.py -w 1000
 ```
 O comando apresentado acima gera um workload de 1000 tarefas (contendo nome, deadline, ponto de função e id) em uma lista de backlog que utilizamos como entrada no algoritmo. 
 
-A saida devera ser algo como:
+A saída esperada deve ser algo semelhante a apresentada abaixo:
 ```
 [['Editar Mercadorias', 4, 10, 53], ['Consultar Gerentes', 2, 10, 16], ['Excluir Mercadorias', 3, 10, 49], ['Excluir Administradores', 4, 10, 50], ['Excluir Usuarios', 5, 10, 63], ['Consultar Gerentes', 6, 10, 185]]
 
