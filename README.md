@@ -38,6 +38,7 @@ A saida devera ser algo como:
 
 ```
 
+Voce poderá visualizar o workload e o resultado nos arquivos workload.txt e resultado.txt
 
 ### 3. Referências
 
