@@ -19,9 +19,18 @@ A linguagem utilizada para elaboração do trabalho é a linguagem [Python 3](ht
 *No atual estado do projeto não se faz necessária a importação destas dependências, pois elas serão utilizadas nas próximas etapas do trabalho para geração de gráfico e realização da análise assintótica, reutilizando os scripts passados pelo professor.*
 
 ### 2. Exemplo de execução
+Para visualizar a ajuda execute:
+```python
+python3 jobschedule.py -h
+```
 
+para executar voce deve realizar da seguinte maneira:
+Para visualizar a ajuda execute:
+```python
+python3 jobschedule.py -w 1000
 ```
-```
+para criar 1000 tarefas
+
 
 ### 3. Referências
 
