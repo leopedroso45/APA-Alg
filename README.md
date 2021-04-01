@@ -19,7 +19,9 @@ A linguagem utilizada para elaboração do trabalho é a linguagem [Python 3](ht
 *No atual estado do projeto não se faz necessária a importação destas dependências, pois elas serão utilizadas nas próximas etapas do trabalho para geração de gráfico e realização da análise assintótica, reutilizando os scripts passados pelo professor.*
 
 ### 2. Exemplo de execução
+
 Para visualizar a ajuda execute:
+
 ```python
 python3 jobschedule.py -h
 ```
@@ -28,7 +30,7 @@ para executar com 1000 tarefas, por exemplo voce deve executar o seguinte comand
 ```python
 python3 jobschedule.py -w 1000
 ```
-para criar 1000 tarefas
+O comando apresentado acima gera um workload de 1000 tarefas (contendo nome, deadline, ponto de função e id) em uma lista de backlog que utilizamos como entrada no algoritmo. 
 
 
 ### 3. Referências
