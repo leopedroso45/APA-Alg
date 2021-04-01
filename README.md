@@ -24,8 +24,7 @@ Para visualizar a ajuda execute:
 python3 jobschedule.py -h
 ```
 
-para executar voce deve realizar da seguinte maneira:
-Para visualizar a ajuda execute:
+para executar com 1000 tarefas, por exemplo voce deve executar o seguinte comando:
 ```python
 python3 jobschedule.py -w 1000
 ```
