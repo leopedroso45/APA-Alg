@@ -43,7 +43,6 @@ def printJobScheduling(backlog, quantidade_tarefas):
     #pra manter/acompanhar slots com tempo livre
     #cria array com a quantidade de
     resultado = [False] * quantidade_tarefas
-    print(resultado)
 
     #pra manter os resultados das sequencias de tarefas
     job = ['-1'] * quantidade_tarefas
