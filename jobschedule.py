@@ -59,7 +59,11 @@ def printJobScheduling(backlog, quantidade_tarefas):
                 resultado[j] = True
                 job[j] = backlog[i]
                 break
-
+                
+    #escreve os resultados em um arquivo
+    f = open("resultado.txt", "w")
+    f.write(str(job));
+    
     # printa a sequencia de tarefas
     return(job)
 
