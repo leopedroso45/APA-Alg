@@ -428,6 +428,46 @@ class SortInsertion(Experimento):
 	def g(self, n, c):
 		return n*n*c
 
+class SortHeap(Experimento):
+
+	def __init__(self, args):
+		super().__init__(args)
+		self.id = "i"
+		self.script = "alg_sort_heap.py"
+		self.output = "alg_sort_heap.txt"
+
+		indice_cor = 2
+
+		# configurações de plotagem
+		self.medicao_legenda = "sort heap medido"
+		self.medicao_cor_rgb = mapa_escalar.to_rgba(2*indice_cor)
+		self.medicao_formato = formatos[indice_cor]
+
+		self.aproximacao_legenda = "sort heap aproximado"
+		self.aproximacao_cor_rgb = mapa_escalar.to_rgba(2*indice_cor+1)
+
+		# configurações de plotagem upper bound g(x)
+		self.gn1_constante = 0.000001
+		self.gn1_legenda = "g(n)=n^2, c={:.2e}".format(self.gn1_constante)
+
+		# configurações de plotagem lower bound g(x)
+		self.gn2_constante = 0.0000001
+		self.gn2_legenda = "g(n)=n^2, c={:.2e}".format(self.gn2_constante)
+
+		self.multiplo = 1
+		self.tamanhos_aproximados = range(self.args.nmax * self.multiplo+1)
+
+	def executa_aproximacao(self):
+		# realiza aproximação
+		parametros, pcov = opt.curve_fit(funcao_linear, xdata=self.tamanhos, ydata=self.medias)
+		self.aproximados = [funcao_quadratica(x, *parametros) for x in self.tamanhos_aproximados ]
+		print("aproximados:           {}".format(self.aproximados))
+		print("parametros_otimizados: {}".format(parametros))
+		print("pcov:                  {}".format(pcov))
+
+	def g(self, n, c):
+		return n*n*c
+
 
 def main():
 	'''
@@ -487,7 +527,7 @@ def main():
 	imprime_config(args)
 
 	# lista de experimentos disponíveis TspNaive(args),
-	experimentos = [TspNaive(args), SortSelection(args), SortInsertion(args), SortJobSchedule(args)]
+	experimentos = [SortJobSchedule(args), SortHeap(args)]
 
 	for e in experimentos:
 		if args.algoritmos is None or e.id in args.algoritmos:
