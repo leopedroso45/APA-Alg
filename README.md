@@ -51,12 +51,6 @@ python3 alg_lab4.py -h
 
 ### 4. Exemplo de execução do algoritmo
 
-Para visualizar a ajuda execute:
-
-```python
-python3 jobschedule.py -h
-```
-
 para executar com 1000 tarefas, por exemplo voce deve executar o seguinte comando:
 ```python
 python3 jobschedule.py -w 1000
@@ -70,6 +64,12 @@ A saída esperada deve ser algo semelhante a apresentada abaixo:
 ```
 
 Voce poderá visualizar o workload e o resultado nos arquivos workload.txt e resultado.txt
+
+Para visualizar a ajuda execute:
+
+```python
+python3 jobschedule.py -h
+```
 
 ### 5. Referências
 
