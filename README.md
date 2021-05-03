@@ -16,7 +16,10 @@ A linguagem utilizada para elaboração do trabalho é a linguagem [Python 3](ht
 - [scipy](https://www.scipy.org/)
 - [ushlex](https://pypi.org/project/ushlex/)
 
-*No atual estado do projeto não se faz necessária a importação destas dependências, pois elas serão utilizadas nas próximas etapas do trabalho para geração de gráfico e realização da análise assintótica, reutilizando os scripts passados pelo professor.*
+Estas dependencias podem ser instaladas ao executar o seguinte comando:
+```python
+pip3 install -r requirements.txt
+```
 
 ### 2. Exemplo de execução da avaliação experimental
 
