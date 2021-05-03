@@ -18,7 +18,35 @@ A linguagem utilizada para elaboração do trabalho é a linguagem [Python 3](ht
 
 *No atual estado do projeto não se faz necessária a importação destas dependências, pois elas serão utilizadas nas próximas etapas do trabalho para geração de gráfico e realização da análise assintótica, reutilizando os scripts passados pelo professor.*
 
-### 2. Exemplo de execução
+### 2. Exemplo de execução da avaliação experimental
+
+Para visualizar a ajuda execute:
+
+```python
+python3 alg_lab4.py -h
+```
+
+para executar o experimento voce deve executar o seguinte comando:
+```python
+python3 alg_lab4.py -l j --nstop 1000
+```
+O comando apresentado acima executa o experimento com uma instancia (n) = 1000 e apresenta o gráfico
+
+### 3. Exemplo de execução da avaliação analítica
+
+Para visualizar a ajuda execute:
+
+```python
+python3 alg_lab4.py -h
+```
+
+para executar o experimento voce deve executar o seguinte comando:
+```python
+python3 alg_lab4.py --seed 1 --nstop 11
+```
+O comando apresentado acima executa o experimento com uma instancia (n) = 11 e apresenta o gráfico
+
+### 4. Exemplo de execução do algoritmo
 
 Para visualizar a ajuda execute:
 
@@ -40,6 +68,6 @@ A saída esperada deve ser algo semelhante a apresentada abaixo:
 
 Voce poderá visualizar o workload e o resultado nos arquivos workload.txt e resultado.txt
 
-### 3. Referências
+### 5. Referências
 
 Para a execução do presente trabalho, utilizamos como fonte o algoritmo disponilizado no site [GeeksforGeeks](https://www.geeksforgeeks.org/job-sequencing-problem/) em um artigo que aborda o problema de 'Job Sequencing'.
