@@ -371,7 +371,7 @@ class SortJobSchedule(Experimento):
 
 	def executa_aproximacao(self):
 		# realiza aproximação
-		parametros, pcov = opt.curve_fit(funcao_linear, xdata=self.tamanhos, ydata=self.medias)
+		parametros, pcov = opt.curve_fit(funcao_quadratica, xdata=self.tamanhos, ydata=self.medias)
 		self.aproximados = [funcao_quadratica(x, *parametros) for x in self.tamanhos_aproximados ]
 		print("aproximados:           {}".format(self.aproximados))
 		print("parametros_otimizados: {}".format(parametros))
@@ -393,7 +393,7 @@ class SortInsertion(Experimento):
 	def __init__(self, args):
 		super().__init__(args)
 		self.id = "i"
-		self.script = "../lab_2/alg_sort_insertion.py"
+		self.script = "alg_sort_insertion.py"
 		self.output = "alg_sort_insertion.txt"
 
 		indice_cor = 2
@@ -527,7 +527,7 @@ def main():
 	imprime_config(args)
 
 	# lista de experimentos disponíveis TspNaive(args),
-	experimentos = [SortJobSchedule(args), SortHeap(args)]
+	experimentos = [SortJobSchedule(args), TspNaive(args)]
 
 	for e in experimentos:
 		if args.algoritmos is None or e.id in args.algoritmos:
@@ -543,7 +543,7 @@ def main():
 	# configurações gerais
 	plt.legend()
 	#plt.xticks(range(args.nstart, args.nstop+1, args.nstep))
-	plt.title("Luiz Guilherme Fritsch - Impacto de n".format(args.trials, args.seed))
+	plt.title("Avaliação Experimental - Intel Core i5-7200U - Impacto de n".format(args.trials, args.seed))
 	plt.xlabel("Tamanho da instância (n)")
 	plt.ylabel("Função")
 
