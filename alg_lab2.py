@@ -7,9 +7,15 @@
 # Bacharelado em: Ciência da Camputação, Eng. de Software, Eng. de Telecomunicações
 
 # Algoritmos
-# Laboratório 4: complexidade assintótica e avaliação experimental
+# Laboratório 2: avaliação experimental
 
-
+DEFAULT_SEED = 1
+DEFAULT_N_START = 1
+DEFAULT_N_STOP = 10
+DEFAULT_N_STEP = 1
+DEFAULT_TRIALS = 3
+DEFAULT_OUTPUT = None #"alg_lab.png"
+DEFAULT_ALGORITMOS = None # executa todos
 
 try:
 	import sys
@@ -18,7 +24,6 @@ try:
 	import logging
 	import subprocess
 	import shlex
-	import logging
 	from abc import ABC, abstractmethod
 
 	from scipy.special import factorial
@@ -42,19 +47,6 @@ except ImportError as error:
 	print("  pip3 install -r requirements.txt ")
 	print()
 	sys.exit(-1)
-
-DEFAULT_SEED = None
-DEFAULT_N_START = 1
-DEFAULT_N_STOP = 10
-DEFAULT_N_STEP = 1
-DEFAULT_N_MAX  = None
-DEFAULT_TRIALS = 3
-DEFAULT_OUTPUT = None #"alg_lab.png"
-DEFAULT_ALGORITMOS = None # executa todos
-DEFAULT_MODELOS = None
-
-DEFAULT_LOG_LEVEL = logging.INFO
-TIME_FORMAT = '%Y-%m-%d,%H:%M:%S'
 
 # Lista completa de mapas de cores
 # https://matplotlib.org/examples/color/colormaps_reference.html
@@ -89,30 +81,6 @@ formatos = ['.', 'v', 'o', '^', '<', '>', '1', '2', '3', '4', 's', 'p', '*', 'h'
 # '|'	vline marker
 # '_'	hline marker
 
-
-# https://matplotlib.org/stable/gallery/lines_bars_and_markers/linestyles.html
-linestyle_str = [
-     ('solid', 'solid'),      # Same as (0, ()) or '-'
-     ('dotted', 'dotted'),    # Same as (0, (1, 1)) or '.'
-     ('dashed', 'dashed'),    # Same as '--'
-     ('dashdot', 'dashdot')]  # Same as '-.'
-
-linestyle_tuple = [
-     ('loosely dotted',        (0, (1, 10))),
-     ('dotted',                (0, (1, 1))),
-     ('densely dotted',        (0, (1, 1))),
-
-     ('loosely dashed',        (0, (5, 10))),
-     ('dashed',                (0, (5, 5))),
-     ('densely dashed',        (0, (5, 1))),
-
-     ('loosely dashdotted',    (0, (3, 10, 1, 10))),
-     ('dashdotted',            (0, (3, 5, 1, 5))),
-     ('densely dashdotted',    (0, (3, 1, 1, 1))),
-
-     ('dashdotdotted',         (0, (3, 5, 1, 5, 1, 5))),
-     ('loosely dashdotdotted', (0, (3, 10, 1, 10, 1, 10))),
-     ('densely dashdotdotted', (0, (3, 1, 1, 1, 1, 1)))]
 
 def funcao_fatorial(n, cpu):
 	'''
@@ -149,11 +117,10 @@ def imprime_config(args):
 	Mostra os argumentos recebidos e as configurações processadas
 	:args: parser.parse_args
 	'''
-	logging.info("Argumentos:\n\t{0}\n".format(" ".join([x for x in sys.argv])))
-	logging.info("Configurações:")
-	for k, v in sorted(vars(args).items()):
-		logging.info("\t{0}: {1}".format(k, v))
-	logging.info("")
+	print("Argumentos:\n\t{0}\n".format(" ".join([x for x in sys.argv])))
+	print("Configurações:")
+	for k, v in sorted(vars(args).items()): print("\t{0}: {1}".format(k, v))
+	print("")
 
 
 class Experimento(ABC):
@@ -168,38 +135,22 @@ class Experimento(ABC):
 		self.medias = []
 		self.desvios = []
 		self.aproximados = []
-		self.tamanhos_aproximados = []
 
-		indice_cor = 0
 		#configurações de plotagem
 		self.medicao_legenda = "medicao_legenda"
-		self.medicao_cor_rgb = mapa_escalar.to_rgba(2*indice_cor+0)
+		self.medicao_cor_rgb = mapa_escalar.to_rgba(0)
 		self.medicao_formato = formatos[1]
 
 		self.aproximacao_legenda = "aproximacao_legenda"
-		self.aproximacao_cor_rgb = mapa_escalar.to_rgba(2*indice_cor+1)
-
-		# configurações de plotagem upper bound g(x)
-		self.gn1_constante = 1
-		self.gn1_legenda = "g(n)=??, c=%d" % self.gn1_constante
-
-		# configurações de plotagem lower bound g(x)
-		self.gn2_constante = 1
-		self.gn2_legenda = "g(n)=??, c=%d" % self.gn2_constante
-
-		self.multiplo = 1
-
-	@abstractmethod
-	def g(self, n, c):
-		pass
+		self.aproximacao_cor_rgb = mapa_escalar.to_rgba(1)
 
 	def executa_experimentos(self):
 		# cria string de comando
 		comando_str = "python3 {}".format(self.script)
 		comando_str += " --out {}".format(self.output)
-		comando_str += " --nstart {}".format(self.args.nstart * self.multiplo)
-		comando_str += " --nstop {}".format(self.args.nstop * self.multiplo)
-		comando_str += " --nstep {}".format(self.args.nstep * self.multiplo)
+		comando_str += " --nstart {}".format(self.args.nstart)
+		comando_str += " --nstop {}".format(self.args.nstop)
+		comando_str += " --nstep {}".format(self.args.nstep)
 		comando_str += " --trials {}".format(self.args.trials)
 		if self.args.seed is not None:
 			comando_str += " --seed {}".format(self.args.seed)
@@ -237,22 +188,11 @@ class Experimento(ABC):
 		pass
 
 	def plota_aproximacao(self):
-		plt.plot(self.tamanhos_aproximados, self.aproximados, label=self.aproximacao_legenda, color=self.aproximacao_cor_rgb)
+		plt.plot(self.tamanhos, self.aproximados, label=self.aproximacao_legenda, color=self.aproximacao_cor_rgb)
 
 	def plota_medicao(self):
 		plt.errorbar(x=self.tamanhos, y=self.medias, yerr=self.desvios, fmt=self.medicao_formato,
 					 label=self.medicao_legenda, color=self.medicao_cor_rgb, linewidth=2)
-
-	def plota_gn(self, constante, legenda, cor, estilo_linha):
-		valores = [self.g(n, constante) for n in self.tamanhos_aproximados]
-		logging.debug("valores: {}".format(valores))
-		plt.plot(self.tamanhos_aproximados, valores, linestyle=estilo_linha, label=legenda, color=cor)
-
-	def plota_assintotica(self):
-		if self.gn1_constante is not None:
-			self.plota_gn(self.gn1_constante, self.gn1_legenda, self.aproximacao_cor_rgb, "dotted")
-		if self.gn2_constante is not None:
-			self.plota_gn(self.gn2_constante, self.gn2_legenda, self.aproximacao_cor_rgb, "dashed")
 
 
 class TspNaive(Experimento):
@@ -263,37 +203,21 @@ class TspNaive(Experimento):
 		self.script = "alg_tsp_naive.py"
 		self.output = "out_tsp_naive.txt"
 
-		indice_cor = 1
-
 		# configurações de plotagem
 		self.medicao_legenda = "tsp naive medido"
-		self.medicao_cor_rgb = mapa_escalar.to_rgba(2*indice_cor)
-		self.medicao_formato = formatos[indice_cor]
+		self.medicao_cor_rgb = mapa_escalar.to_rgba(0)
+		self.medicao_formato = formatos[1]
 
 		self.aproximacao_legenda = "tsp naive aproximado"
-		self.aproximacao_cor_rgb = mapa_escalar.to_rgba(2*indice_cor+1)
-
-		# configurações de plotagem upper bound g(x)
-		self.gn1_constante = 0.000001
-		self.gn1_legenda = "g(n)=n!, c={:.2e}".format(self.gn1_constante)
-
-		# configurações de plotagem lower bound g(x)
-		self.gn2_constante = 0.0000001
-		self.gn2_legenda = "g(n)=n!, c={:.2e}".format(self.gn2_constante)
-
-		self.multiplo = 1
-		self.tamanhos_aproximados = range(self.args.nmax * self.multiplo+1)
+		self.aproximacao_cor_rgb = mapa_escalar.to_rgba(1)
 
 	def executa_aproximacao(self):
 		# realiza aproximação
 		parametros, pcov = opt.curve_fit(funcao_fatorial, xdata=self.tamanhos, ydata=self.medias)
-		self.aproximados = [funcao_fatorial(x, *parametros) for x in self.tamanhos_aproximados]
+		self.aproximados = [funcao_fatorial(x, *parametros) for x in self.tamanhos]
 		print("aproximados:           {}".format(self.aproximados))
 		print("parametros_otimizados: {}".format(parametros))
 		print("pcov:                  {}".format(pcov))
-
-	def g(self, n, c):
-		return factorial(n)*c
 
 
 class SortSelection(Experimento):
@@ -304,40 +228,21 @@ class SortSelection(Experimento):
 		self.script = "alg_sort_selection.py"
 		self.output = "alg_sort_selection.txt"
 
-		indice_cor = 0
-
 		# configurações de plotagem
 		self.medicao_legenda = "sort selection medido"
-		self.medicao_cor_rgb = mapa_escalar.to_rgba(2*indice_cor)
-		self.medicao_formato = formatos[indice_cor]
+		self.medicao_cor_rgb = mapa_escalar.to_rgba(2)
+		self.medicao_formato = formatos[2]
 
 		self.aproximacao_legenda = "sort selection aproximado"
-		self.aproximacao_cor_rgb = mapa_escalar.to_rgba(2*indice_cor+1)
-
-		# configurações de plotagem upper bound g(x)
-		self.gn1_constante = 0.000001
-		self.gn1_legenda = "g(n)=n^2, c={:.2e}".format(self.gn1_constante)
-
-		# configurações de plotagem lower bound g(x)
-		self.gn2_constante = 0.0000001
-		self.gn2_legenda = "g(n)=n^2, c={:.2e}".format(self.gn2_constante)
-
-		self.multiplo = 1
-		self.tamanhos_aproximados = range(self.args.nmax * self.multiplo+1)
+		self.aproximacao_cor_rgb = mapa_escalar.to_rgba(3)
 
 	def executa_aproximacao(self):
 		# realiza aproximação
 		parametros, pcov = opt.curve_fit(funcao_quadratica, xdata=self.tamanhos, ydata=self.medias)
-		self.aproximados = [funcao_quadratica(x, *parametros) for x in self.tamanhos_aproximados ]
+		self.aproximados = [funcao_quadratica(x, *parametros) for x in self.tamanhos]
 		print("aproximados:           {}".format(self.aproximados))
 		print("parametros_otimizados: {}".format(parametros))
 		print("pcov:                  {}".format(pcov))
-
-	def g(self, n, c):
-		return n*n*c
-
-
-########################################################################################################################
 
 
 class SortJobSchedule(Experimento):
@@ -345,128 +250,72 @@ class SortJobSchedule(Experimento):
 	def __init__(self, args):
 		super().__init__(args)
 		self.id = "j"
-		self.script = "alg_sort_JobSchedule.py"
-		self.output = "alg_sort_JobSchedule.txt"
-
-		indice_cor = 0
+		self.script = "alg_sort_jobschedule.py"
+		self.output = "alg_sort_jobschedule.txt"
 
 		# configurações de plotagem
 		self.medicao_legenda = "sort JobSchedule medido"
-		self.medicao_cor_rgb = mapa_escalar.to_rgba(2*indice_cor)
-		self.medicao_formato = formatos[indice_cor]
+		self.medicao_cor_rgb = mapa_escalar.to_rgba(2)
+		self.medicao_formato = formatos[2]
 
 		self.aproximacao_legenda = "sort JobSchedule aproximado"
-		self.aproximacao_cor_rgb = mapa_escalar.to_rgba(2*indice_cor+1)
-
-		# configurações de plotagem upper bound g(x)
-		self.gn1_constante = 0.000001
-		self.gn1_legenda = "g(n)=n^2, c={:.2e}".format(self.gn1_constante)
-
-		# configurações de plotagem lower bound g(x)
-		self.gn2_constante = 0.0000001
-		self.gn2_legenda = "g(n)=n^2, c={:.2e}".format(self.gn2_constante)
-
-		self.multiplo = 1
-		self.tamanhos_aproximados = range(self.args.nmax * self.multiplo+1)
+		self.aproximacao_cor_rgb = mapa_escalar.to_rgba(3)
 
 	def executa_aproximacao(self):
 		# realiza aproximação
 		parametros, pcov = opt.curve_fit(funcao_quadratica, xdata=self.tamanhos, ydata=self.medias)
-		self.aproximados = [funcao_quadratica(x, *parametros) for x in self.tamanhos_aproximados ]
+		self.aproximados = [funcao_quadratica(x, *parametros) for x in self.tamanhos]
 		print("aproximados:           {}".format(self.aproximados))
 		print("parametros_otimizados: {}".format(parametros))
 		print("pcov:                  {}".format(pcov))
-
-	def g(self, n, c):
-		return n*n*c
-
-
-
-
-
-########################################################################################################################
-
-
 
 class SortInsertion(Experimento):
 
 	def __init__(self, args):
 		super().__init__(args)
 		self.id = "i"
-		self.script = "../lab_2/alg_sort_insertion.py"
+		self.script = "alg_sort_insertion.py"
 		self.output = "alg_sort_insertion.txt"
-
-		indice_cor = 2
 
 		# configurações de plotagem
 		self.medicao_legenda = "sort insertion medido"
-		self.medicao_cor_rgb = mapa_escalar.to_rgba(2*indice_cor)
-		self.medicao_formato = formatos[indice_cor]
+		self.medicao_cor_rgb = mapa_escalar.to_rgba(4)
+		self.medicao_formato = formatos[3]
 
 		self.aproximacao_legenda = "sort insertion aproximado"
-		self.aproximacao_cor_rgb = mapa_escalar.to_rgba(2*indice_cor+1)
-
-		# configurações de plotagem upper bound g(x)
-		self.gn1_constante = 0.000001
-		self.gn1_legenda = "g(n)=n^2, c={:.2e}".format(self.gn1_constante)
-
-		# configurações de plotagem lower bound g(x)
-		self.gn2_constante = 0.0000001
-		self.gn2_legenda = "g(n)=n^2, c={:.2e}".format(self.gn2_constante)
-
-		self.multiplo = 1
-		self.tamanhos_aproximados = range(self.args.nmax * self.multiplo+1)
+		self.aproximacao_cor_rgb = mapa_escalar.to_rgba(6)
 
 	def executa_aproximacao(self):
 		# realiza aproximação
 		parametros, pcov = opt.curve_fit(funcao_quadratica, xdata=self.tamanhos, ydata=self.medias)
-		self.aproximados = [funcao_quadratica(x, *parametros) for x in self.tamanhos_aproximados ]
+		self.aproximados = [funcao_quadratica(x, *parametros) for x in self.tamanhos]
 		print("aproximados:           {}".format(self.aproximados))
 		print("parametros_otimizados: {}".format(parametros))
 		print("pcov:                  {}".format(pcov))
 
-	def g(self, n, c):
-		return n*n*c
-
-class SortHeap(Experimento):
+class SortReverse(Experimento):
 
 	def __init__(self, args):
 		super().__init__(args)
-		self.id = "i"
-		self.script = "alg_sort_heap.py"
-		self.output = "alg_sort_heap.txt"
-
-		indice_cor = 2
+		self.id = "r"
+		self.script = "../exe_estrutura_dados/exe1/alg_sort_reverse.py"
+		self.output = "../exe_estrutura_dados/exe1/alg_sort_reverse.txt"
 
 		# configurações de plotagem
-		self.medicao_legenda = "sort heap medido"
-		self.medicao_cor_rgb = mapa_escalar.to_rgba(2*indice_cor)
-		self.medicao_formato = formatos[indice_cor]
+		self.medicao_legenda = "sort reverse medido"
+		self.medicao_cor_rgb = mapa_escalar.to_rgba(4)
+		self.medicao_formato = formatos[3]
 
-		self.aproximacao_legenda = "sort heap aproximado"
-		self.aproximacao_cor_rgb = mapa_escalar.to_rgba(2*indice_cor+1)
-
-		# configurações de plotagem upper bound g(x)
-		self.gn1_constante = 0.000001
-		self.gn1_legenda = "g(n)=n^2, c={:.2e}".format(self.gn1_constante)
-
-		# configurações de plotagem lower bound g(x)
-		self.gn2_constante = 0.0000001
-		self.gn2_legenda = "g(n)=n^2, c={:.2e}".format(self.gn2_constante)
-
-		self.multiplo = 1
-		self.tamanhos_aproximados = range(self.args.nmax * self.multiplo+1)
+		self.aproximacao_legenda = "sort reverse aproximado"
+		self.aproximacao_cor_rgb = mapa_escalar.to_rgba(6)
 
 	def executa_aproximacao(self):
 		# realiza aproximação
 		parametros, pcov = opt.curve_fit(funcao_linear, xdata=self.tamanhos, ydata=self.medias)
-		self.aproximados = [funcao_quadratica(x, *parametros) for x in self.tamanhos_aproximados ]
+		self.aproximados = [funcao_linear(x, *parametros) for x in self.tamanhos]
 		print("aproximados:           {}".format(self.aproximados))
 		print("parametros_otimizados: {}".format(parametros))
 		print("pcov:                  {}".format(pcov))
-
-	def g(self, n, c):
-		return n*(math.log(n))*c
 
 
 def main():
@@ -476,12 +325,12 @@ def main():
 	'''
 
 	# Definição de argumentos
-	parser = argparse.ArgumentParser(description='Laboratório 4')
+	parser = argparse.ArgumentParser(description='Laboratório 2')
 
 	help_msg = "semente aleatória"
 	parser.add_argument("--seed", "-s", help=help_msg, default=DEFAULT_SEED, type=int)
 
-	help_msg = "n stop.          Padrão:{}".format(DEFAULT_N_STOP)
+	help_msg = "n máximo.          Padrão:{}".format(DEFAULT_N_STOP)
 	parser.add_argument("--nstop", "-n", help=help_msg, default=DEFAULT_N_STOP, type=int)
 
 	help_msg = "n mínimo.          Padrão:{}".format(DEFAULT_N_START)
@@ -490,62 +339,39 @@ def main():
 	help_msg = "n passo.           Padrão:{}".format(DEFAULT_N_STEP)
 	parser.add_argument("--nstep", "-e", help=help_msg, default=DEFAULT_N_STEP, type=int)
 
-	help_msg = "n máximo.          Padrão:{}".format(DEFAULT_N_MAX)
-	parser.add_argument("--nmax", "-m", help=help_msg, default=DEFAULT_N_MAX, type=int)
-
 	help_msg = "tentativas.        Padrão:{}".format(DEFAULT_TRIALS)
 	parser.add_argument("--trials", "-t", help=help_msg, default=DEFAULT_TRIALS, type=int)
 
 	help_msg = "figura (extensão .png ou .pdf) ou nenhum para apresentar na tela.  Padrão:{}".format(DEFAULT_OUTPUT)
 	parser.add_argument("--out", "-o", help=help_msg, default=DEFAULT_OUTPUT, type=str)
 
-	help_msg = "algoritmos (t=tsp naive, s=selection sort) ou nenhum para executar todos.  Padrão:{}".format(DEFAULT_ALGORITMOS)
+	help_msg = "algoritmos (t=tsp naive, s=selection sort, i=insertion sort, r=reverse sort, j=jobschedule) ou nenhum para executar todos.  Padrão:{}".format(DEFAULT_ALGORITMOS)
 	parser.add_argument("--algoritmos", "-l", help=help_msg, default=DEFAULT_ALGORITMOS, type=str)
-
-	help_msg = "verbosity logging level (INFO=%d DEBUG=%d)" % (logging.INFO, logging.DEBUG)
-	parser.add_argument("--verbosity", "-v", help=help_msg, default=DEFAULT_LOG_LEVEL, type=int)
-
-	#action='store_true'
-	parser.add_argument("--skip", "-k", default=False, help="Pula execução.", action='store_true')
 
 	# Lê argumentos da linha de comando
 	args = parser.parse_args()
-	if args.nmax is None:
-		args.nmax = args.nstop
-
-	# configura o mecanismo de logging
-	if args.verbosity == logging.DEBUG:
-		# mostra mais detalhes
-		logging.basicConfig(format='%(asctime)s %(levelname)s {%(module)s} [%(funcName)s] %(message)s',
-							datefmt=TIME_FORMAT, level=args.verbosity)
-
-	else:
-		logging.basicConfig(format='%(message)s',
-							datefmt=TIME_FORMAT, level=args.verbosity)
 
 	# imprime configurações para fins de log
 	imprime_config(args)
 
-	# lista de experimentos disponíveis TspNaive(args),
-	experimentos = [SortJobSchedule(args), TspNaive(args)]
+	# lista de experimentos disponíveis
+	experimentos = [TspNaive(args), SortSelection(args), SortInsertion(args), SortReverse(args), SortJobSchedule(args)]
 
 	for e in experimentos:
 		if args.algoritmos is None or e.id in args.algoritmos:
-			if not args.skip:
-				e.executa_experimentos()
+			e.executa_experimentos()
 			e.carrega_resultados()
 			e.executa_aproximacao()
 			e.imprime_dados()
 			e.plota_medicao()
 			e.plota_aproximacao()
-			e.plota_assintotica()
 
 	# configurações gerais
 	plt.legend()
-	#plt.xticks(range(args.nstart, args.nstop+1, args.nstep))
-	plt.title("Avaliação Experimental - AMD ryzen 5 1600 - Impacto de n".format(args.trials, args.seed))
+	plt.xticks(range(args.nstart, args.nstop+1, args.nstep))
+	plt.title("Tempo de execução (trials={}, seed={})".format(args.trials, args.seed))
 	plt.xlabel("Tamanho da instância (n)")
-	plt.ylabel("Função")
+	plt.ylabel("Tempo de execução (s)")
 
 	if args.out is None:
 		# mostra
