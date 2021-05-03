@@ -23,31 +23,31 @@ pip3 install -r requirements.txt
 
 ### 2. Exemplo de execução da avaliação experimental
 
-Para visualizar a ajuda execute:
-
-```python
-python3 alg_lab4.py -h
-```
-
 para executar o experimento voce deve executar o seguinte comando:
 ```python
 python3 alg_lab4.py -l j --nstop 1000
 ```
 O comando apresentado acima executa o experimento com uma instancia (n) = 1000 e apresenta o gráfico
 
-### 3. Exemplo de execução da avaliação analítica
-
 Para visualizar a ajuda execute:
 
 ```python
 python3 alg_lab4.py -h
 ```
 
+### 3. Exemplo de execução da avaliação analítica
+
 para executar o experimento voce deve executar o seguinte comando:
 ```python
 python3 alg_lab4.py --seed 1 --nstop 11
 ```
 O comando apresentado acima executa o experimento com uma instancia (n) = 11 e apresenta o gráfico
+
+Para visualizar a ajuda execute:
+
+```python
+python3 alg_lab4.py -h
+```
 
 ### 4. Exemplo de execução do algoritmo
 
