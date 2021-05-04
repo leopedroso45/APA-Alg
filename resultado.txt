@@ -1,1 +1,1 @@
-[['Cadastrar Tarefas', 4, 6, 8], ['Cadastrar Caixas', 2, 9, 7], ['Cadastrar Caixas', 5, 7, 9], ['Editar Comidas', 4, 7, 6], ['Excluir Usuarios', 5, 10, 2], ['Consultar Gerentes', 6, 10, 0]]
+[['Consultar Funcionarios', 1, 10, 13], ['Editar Usuarios', 6, 10, 41], ['Cadastrar Comidas', 6, 10, 39], ['Consultar Turnos', 6, 10, 28], ['Consultar Turnos', 6, 10, 9], ['Excluir Comidas', 6, 10, 4]]

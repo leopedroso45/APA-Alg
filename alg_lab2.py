@@ -251,7 +251,7 @@ class SortJobSchedule(Experimento):
 		super().__init__(args)
 		self.id = "j"
 		self.script = "alg_sort_jobschedule.py"
-		self.output = "alg_sort_jobschedule.txt"
+		self.output = "alg_sort_JobSchedule.txt"
 
 		# configurações de plotagem
 		self.medicao_legenda = "sort JobSchedule medido"
@@ -260,6 +260,7 @@ class SortJobSchedule(Experimento):
 
 		self.aproximacao_legenda = "sort JobSchedule aproximado"
 		self.aproximacao_cor_rgb = mapa_escalar.to_rgba(3)
+
 
 	def executa_aproximacao(self):
 		# realiza aproximação
@@ -354,12 +355,21 @@ def main():
 	# imprime configurações para fins de log
 	imprime_config(args)
 
+	sb = SortJobSchedule(args)
+	sb.output = "alg_sort_jobschedule.txt"
+	sb.medicao_legenda = "sort JobSchedule 2 medido"
+	sb.medicao_cor_rgb = mapa_escalar.to_rgba(4)
+	sb.medicao_formato = formatos[3]
+	sb.aproximacao_legenda = "sort JobSchedule 2 aproximado"
+	sb.aproximacao_cor_rgb = mapa_escalar.to_rgba(5)
+
 	# lista de experimentos disponíveis
-	experimentos = [TspNaive(args), SortSelection(args), SortInsertion(args), SortReverse(args), SortJobSchedule(args)]
+	# experimentos = [TspNaive(args), SortSelection(args), SortInsertion(args), SortReverse(args), SortJobSchedule(args)]
+	experimentos = [SortJobSchedule(args), sb]
 
 	for e in experimentos:
 		if args.algoritmos is None or e.id in args.algoritmos:
-			e.executa_experimentos()
+			#e.executa_experimentos()
 			e.carrega_resultados()
 			e.executa_aproximacao()
 			e.imprime_dados()
