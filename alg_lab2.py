@@ -261,7 +261,6 @@ class SortJobSchedule(Experimento):
 		self.aproximacao_legenda = "sort JobSchedule aproximado"
 		self.aproximacao_cor_rgb = mapa_escalar.to_rgba(3)
 
-
 	def executa_aproximacao(self):
 		# realiza aproximação
 		parametros, pcov = opt.curve_fit(funcao_quadratica, xdata=self.tamanhos, ydata=self.medias)
@@ -378,7 +377,8 @@ def main():
 
 	# configurações gerais
 	plt.legend()
-	plt.xticks(range(args.nstart, args.nstop+1, args.nstep))
+	# 	plt.xticks(range(args.nstart, args.nstop+1, args.nstep))
+	plt.xticks(range(0, 20000+1, 1000))
 	plt.title("Tempo de execução (trials={}, seed={})".format(args.trials, args.seed))
 	plt.xlabel("Tamanho da instância (n)")
 	plt.ylabel("Tempo de execução (s)")
