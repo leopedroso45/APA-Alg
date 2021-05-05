@@ -29,6 +29,21 @@ python3 alg_lab2.py --seed 1 --nstart 0 --nstop 20000 --nstep 1000
 ```
 O comando apresentado acima executa o experimento com uma instancia (n) = 20000 de 1000 em 1000 e plota o gráfico
 
+ 
+Para executar uma comparação entre a execução em dois computadores, voce deve ter dois txts de resultados nomeados da seguinte maneira:
+
+```text
+alg_sort_jobschedule.txt
+```
+e
+```text
+alg_sort_JobSchedule.txt
+```
+
+Voce deve também alterar a escala do grafico no eixo x, na linha 381 do arquivo alg_lab2_copy.py para os seguintes numeros: nstart, nstop, nstep utilizado na execução.
+
+
+
 Para visualizar a ajuda execute:
 
 ```python
