@@ -364,11 +364,11 @@ def main():
 
 	# lista de experimentos disponíveis
 	# experimentos = [TspNaive(args), SortSelection(args), SortInsertion(args), SortReverse(args), SortJobSchedule(args)]
-	experimentos = [SortJobSchedule(args), sb]
+	experimentos = [SortJobSchedule(args)]
 
 	for e in experimentos:
 		if args.algoritmos is None or e.id in args.algoritmos:
-			#e.executa_experimentos()
+			e.executa_experimentos()
 			e.carrega_resultados()
 			e.executa_aproximacao()
 			e.imprime_dados()
@@ -378,7 +378,7 @@ def main():
 	# configurações gerais
 	plt.legend()
 	# 	plt.xticks(range(args.nstart, args.nstop+1, args.nstep))
-	plt.xticks(range(0, 20000+1, 1000))
+	plt.xticks(range(args.nstart, args.nstop+1, args.nstep))
 	plt.title("Tempo de execução (trials={}, seed={})".format(args.trials, args.seed))
 	plt.xlabel("Tamanho da instância (n)")
 	plt.ylabel("Tempo de execução (s)")
