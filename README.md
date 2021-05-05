@@ -21,35 +21,21 @@ Estas dependencias podem ser instaladas ao executar o seguinte comando:
 pip3 install -r requirements.txt
 ```
 
-### 2. Exemplo de execução da avaliação experimental
+### 2. Exemplo de execução da avaliação analítica
 
 para executar o experimento voce deve executar o seguinte comando:
 ```python
-python3 alg_lab4.py -l j --nstop 1000
+python3 alg_lab2.py --seed 1 --nstart 0 --nstop 20000 --nstep 1000
 ```
-O comando apresentado acima executa o experimento com uma instancia (n) = 1000 e apresenta o gráfico
+O comando apresentado acima executa o experimento com uma instancia (n) = 20000 de 1000 em 1000 e plota o gráfico
 
 Para visualizar a ajuda execute:
 
 ```python
-python3 alg_lab4.py -h
+python3 alg_lab2.py -h
 ```
 
-### 3. Exemplo de execução da avaliação analítica
-
-para executar o experimento voce deve executar o seguinte comando:
-```python
-python3 alg_lab4.py --seed 1 --nstop 11
-```
-O comando apresentado acima executa o experimento com uma instancia (n) = 11 e apresenta o gráfico
-
-Para visualizar a ajuda execute:
-
-```python
-python3 alg_lab4.py -h
-```
-
-### 4. Exemplo de execução do algoritmo
+### 3. Exemplo de execução do algoritmo
 
 para executar com 1000 tarefas, por exemplo voce deve executar o seguinte comando:
 ```python
@@ -57,7 +43,8 @@ python3 jobschedule.py -w 1000
 ```
 O comando apresentado acima gera um workload de 1000 tarefas (contendo nome, deadline, ponto de função e id) em uma lista de backlog que utilizamos como entrada no algoritmo. 
 
-A saída esperada deve ser algo semelhante a apresentada abaixo:
+A saída esperada deve ser algo semelhante a apresentada a
+baixo:
 ```
 [['Editar Mercadorias', 4, 10, 53], ['Consultar Gerentes', 2, 10, 16], ['Excluir Mercadorias', 3, 10, 49], ['Excluir Administradores', 4, 10, 50], ['Excluir Usuarios', 5, 10, 63], ['Consultar Gerentes', 6, 10, 185]]
 
@@ -71,6 +58,6 @@ Para visualizar a ajuda execute:
 python3 jobschedule.py -h
 ```
 
-### 5. Referências
+### 4. Referências
 
 Para a execução do presente trabalho, utilizamos como fonte o algoritmo disponilizado no site [GeeksforGeeks](https://www.geeksforgeeks.org/job-sequencing-problem/) em um artigo que aborda o problema de 'Job Sequencing'.
